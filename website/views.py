@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
 from .models import Code
+from django.conf import settings
+from decouple import config
 
 
 
@@ -24,7 +26,7 @@ def home(request):
 		else:
 
 			#OPEN AI key
-			openai.api_key=config('openai.api_key')
+			openai.api_key=config('OPENAI_API_KEY')
 			
 			#create OPEN AI instance
 			openai.Model.list()
@@ -32,7 +34,7 @@ def home(request):
 
 			try:
 				response=openai.Completion.create(
-					engine="text-davinci-003",
+					engine="gpt-3.5-turbo-instruct",
 				    prompt=f'Respond only with code.{code}',
 				    temperature=0,
 				    max_tokens=1000,
@@ -68,7 +70,7 @@ def suggest(request):
 		else:
 
 			#OPEN AI key
-			openai.api_key=config('openai.api_key')
+			openai.api_key=config('OPENAI_API_KEY')
 			
 			#create OPEN AI instance
 			openai.Model.list()
@@ -76,7 +78,7 @@ def suggest(request):
 
 			try:
 				response = openai.Completion.create(
-				    engine="text-davinci-003",
+				    engine="gpt-3.5-turbo-instruct",
 				    prompt=f'Respond only with code.{code}',
 				    temperature=0,
 				    max_tokens=1000,
